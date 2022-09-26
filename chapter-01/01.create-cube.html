@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>threejs-01</title>
+</head>
+
+<body>
+    <canvas id="c"></canvas>
+</body>
+<script type="module">
+    import * as THREE from 'https://cdn.bootcdn.net/ajax/libs/three.js/0.144.0/three.module.min.js';
+
+    function main() {
+        const canvas = document.querySelector('#c');
+        // 01. 创建渲染器 
+        // 渲染器负责将你提供的所有数据渲染绘制到canvas上 
+        // WebGLRenderer通过WebGL将三维空间渲染到canvas上
+        // 如果你没有给three.js传canvas，three.js会自己创建一个 ，但是你必须手动把它添加到document。
+        const renderer = new THREE.WebGLRenderer({ canvas });
+
+        
+        // 02. 创建相机
+        // https://threejs.org/manual/#en/fundamentals
+        // https://threejs.org/docs/#api/en/cameras/PerspectiveCamera
+
+        // 视野范围(field of view)的缩写 | 摄像机视锥体垂直视野角度
+        const fov = 75;
+        // 画布的宽高比
+        const aspect = 2;  // the canvas default
+        // 近平面
+        const near = 0.1;
+        // 远平面
+        const far = 5;
+        
+        // 使用perspective projection（透视投影）来进行投影
+        // 用来模拟人眼所看到的景象，它是3D场景的渲染中使用得最普遍的投影模式。
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        
+        // 设置相机位置 | 相机的位置在z = 2。它朝向Z轴负方向
+        // 相机默认向下看 -Z 轴，向上看 +Y 轴
+        camera.position.z = 2;
+
+
+        // 03.创建场景
+        // 场景是three.js的基本的组成部分
+        const scene = new THREE.Scene();
+
+        // 04. 创建立方体
+        // https://threejs.org/docs/#api/en/geometries/BoxGeometry
+
+        // 宽度;即平行于 X 轴的边的长度。默认值为 1。
+        const boxWidth = 1;
+        // 高度;即平行于 Y 轴的边的长度。默认值为 1。
+        const boxHeight = 1;
+        // 深度;即平行于 Z 轴的边的长度。默认值为 1。
+        const boxDepth = 1;
+
+        // 传入宽度,高度,深度创建立方体
+        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+        // 基础材质 | 染色
+        // https://threejs.org/docs/#api/en/materials/MeshBasicMaterial
+        const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 });  // greenish blue
+
+        // 创建网格对象 | 传入创建的物体和材质
+        // https://threejs.org/docs/#api/en/objects/Mesh
+        const cube = new THREE.Mesh(geometry, material);
+
+         // 05. 将网格添加到场景中
+        scene.add(cube);
+
+        // 06. 将场景和相机传入渲染器进行渲染
+        renderer.render(scene, camera);
+
+        // 因为我们直视-Z轴并且立方体和坐标轴是对齐的，所以我们只能看到一个面,在视觉效果上并不能看出这是一个立方体。
+    }
+
+    main();
+
+</script>
+
+</html>
