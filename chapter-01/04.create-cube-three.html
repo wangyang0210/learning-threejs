@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>threejs-01</title>
+</head>
+
+<body>
+    <canvas id="c"></canvas>
+</body>
+<script type="module">
+
+    // 三个网格(Mesh)引用了相同的立方几何体(BoxGeometry)。每个网格(Mesh)引用了一个单独的MeshPhongMaterial材质来显示不同的颜色。
+
+    import * as THREE from 'https://unpkg.com/three@0.144.0/build/three.module.js';
+
+    function main() {
+        const canvas = document.querySelector('#c');
+       // 01. 创建渲染器 
+        // 渲染器负责将你提供的所有数据渲染绘制到canvas上 
+        // 如果你没有给three.js传canvas，three.js会自己创建一个。
+        // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
+        const renderer = new THREE.WebGLRenderer({ 
+            canvas,
+            antialias: true
+        });
+
+        // 设置画布大小
+        renderer.setSize(window.innerWidth, window.innerHeight)
+
+        
+        // 02. 创建相机
+        // https://threejs.org/manual/#en/fundamentals
+        // https://threejs.org/docs/#api/en/cameras/PerspectiveCamera
+
+        // 视野范围(field of view)的缩写 | 摄像机视锥体垂直视野角度
+        const fov = 75;
+        // 画布的宽高比
+        const aspect = 2;  // the canvas default
+        // 近平面
+        const near = 0.1;
+        // 远平面
+        const far = 5;
+        
+        // 使用perspective projection（透视投影）来进行投影
+        // 用来模拟人眼所看到的景象，它是3D场景的渲染中使用得最普遍的投影模式。
+        const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+        
+        // 设置相机位置 | 相机的位置在z = 2。它朝向Z轴负方向
+        // 相机默认向下看 -Z 轴，向上看 +Y 轴
+        camera.position.z = 2;
+
+
+        // 03.创建场景
+        // 场景是three.js的基本的组成部分
+        // https://threejs.org/docs/#api/en/scenes/Scene
+        const scene = new THREE.Scene();
+
+        {
+            const color = 0xFFFFFF;
+            const intensity = 1;
+            const light = new THREE.DirectionalLight(color, intensity);
+            light.position.set(-1, 2, 4);
+            scene.add(light);
+        }
+
+
+        // 04. 创建立方体
+        // https://threejs.org/docs/#api/en/geometries/BoxGeometry
+
+        // 宽度;即平行于 X 轴的边的长度。默认值为 1。
+        const boxWidth = 1;
+        // 高度;即平行于 Y 轴的边的长度。默认值为 1。
+        const boxHeight = 1;
+        // 深度;即平行于 Z 轴的边的长度。默认值为 1。
+        const boxDepth = 1;
+
+        // 传入宽度,高度,深度创建立方体
+        const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
+
+        // 🦎因为基础材质不受光源影响 | 所以这里做出调整更改为受灯光影响的网纹材料
+        function makeInstance(geometry, color, x) {
+            const material = new THREE.MeshPhongMaterial({color});
+
+            const cube = new THREE.Mesh(geometry, material);
+            scene.add(cube);
+
+            cube.position.x = x;
+
+            return cube;
+        }
+
+        const cubes = [
+            makeInstance(geometry, 0x44aa88,  0),
+            makeInstance(geometry, 0x8844aa, -2),
+            makeInstance(geometry, 0xaa8844,  2),
+        ];
+
+        // 因为我们直视-Z轴并且立方体和坐标轴是对齐的，所以我们只能看到一个面,在视觉效果上并不能看出这是一个立方体。
+        // 我们来让立方体旋转起来，以便更好的在三维环境中显示。
+        // 为了让它动起来我们需要用到一个渲染循环函数 requestAnimationFrame.
+        // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+        function render(time) {
+            // console.log(time);
+            time *= 0.001;  // 时间单位转为秒
+
+            cubes.forEach((cube, ndx) => {
+                const speed = 1 + ndx * .1;
+                const rot = time * speed;
+                cube.rotation.x = rot;
+                cube.rotation.y = rot;
+            });
+
+            renderer.render(scene, camera);
+
+            requestAnimationFrame(render);
+        }
+
+        // 07. 调用requestAnimationFrame
+        requestAnimationFrame(render);
+
+    }
+
+    main();
+
+</script>
+
+</html>

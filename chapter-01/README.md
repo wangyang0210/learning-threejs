@@ -64,8 +64,17 @@ near和far代表近平面和远平面，它们限制了摄像机面朝方向的�
 ### 案例
 
 #### 01.create-cube.html
+> 创建一个立方体
 
 ![threejs-1cube-no-light-scene](./static/imgs/threejs-1cube-no-light-scene.svg)
 
 #### 03.create-cube-directionalLight
+> 给立方体增加一个平行光
+
 ![threejs-1cube-with-directionallight](./static/imgs/threejs-1cube-with-directionallight.svg)
+
+
+#### 04.create-cube-three
+> 三个网格(Mesh)引用了相同的立方几何体(BoxGeometry)。每个网格(Mesh)引用了一个单独的MeshPhongMaterial材质来显示不同的颜色。
+
+![threejs-3cubes-scene](./static/imgs/threejs-3cubes-scene.svg)
