@@ -12,14 +12,14 @@
     <canvas id="c"></canvas>
 </body>
 <script type="module">
-    
-    // 创建一个立方体
+
+    // 给立方体增加动画效果
 
     import * as THREE from 'https://cdn.bootcdn.net/ajax/libs/three.js/0.144.0/three.module.min.js';
 
     function main() {
         const canvas = document.querySelector('#c');
-        // 01. 创建渲染器 
+       // 01. 创建渲染器 
         // 渲染器负责将你提供的所有数据渲染绘制到canvas上 
         // 如果你没有给three.js传canvas，three.js会自己创建一个。
         // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
@@ -71,7 +71,7 @@
 
         // 传入宽度,高度,深度创建立方体
         const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth);
-        // 基础材质[不受光源的影响] | 创建一个绿光蓝颜色的材质
+        // 基础材质 | 创建一个绿光蓝颜色的材质
         // https://threejs.org/docs/#api/en/materials/MeshBasicMaterial
         const material = new THREE.MeshBasicMaterial({ color: 0x44aa88 });  // greenish blue
 
@@ -82,10 +82,31 @@
          // 05. 将网格添加到场景中
         scene.add(cube);
 
-        // 06. 将场景和相机传入渲染器进行渲染
-        renderer.render(scene, camera);
-
         // 因为我们直视-Z轴并且立方体和坐标轴是对齐的，所以我们只能看到一个面,在视觉效果上并不能看出这是一个立方体。
+        // 我们来让立方体旋转起来，以便更好的在三维环境中显示。
+        // 为了让它动起来我们需要用到一个渲染循环函数 requestAnimationFrame.
+        // https://developer.mozilla.org/en-US/docs/Web/API/window/requestAnimationFrame
+        function render(time) {
+
+            // requestAnimationFrame会将页面开始加载到函数运行所经历的时间当作入参传给回调函数，单位是毫秒数。
+            // console.log(time);
+            time *= 0.001;  // 时间单位转为秒
+
+            // 一圈的弧度为2Π所以我们的立方体在每个方向旋转一周的时间为6.28秒。
+            // 围绕x轴旋转
+            cube.rotation.x = time;
+            // 围绕y轴旋转
+            cube.rotation.y = time;
+
+            // 06. 将场景和相机传入渲染器进行渲染
+            renderer.render(scene, camera);
+
+            requestAnimationFrame(render);
+        }
+
+        // 07. 调用requestAnimationFrame
+        requestAnimationFrame(render);
+
     }
 
     main();

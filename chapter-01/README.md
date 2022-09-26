@@ -59,10 +59,13 @@ near和far代表近平面和远平面，它们限制了摄像机面朝方向的�
 
 我们能看到摄像机的位置在z = 2。它朝向Z轴负方向。我们的视椎体范围从摄像机前方0.1到5。因为这张图是俯视图，视野范围会受到宽高比的影响。画布的宽度是高度的两倍，所以水平视角会比我们设置的垂直视角75度要大。
 
+
+
 ### 案例
 
-#### 01.create0cube.html
+#### 01.create-cube.html
 
 ![threejs-1cube-no-light-scene](./static/imgs/threejs-1cube-no-light-scene.svg)
 
-#### 
+#### 03.create-cube-directionalLight
+![threejs-1cube-with-directionallight](./static/imgs/threejs-1cube-with-directionallight.svg)
