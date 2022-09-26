@@ -35,7 +35,7 @@
 
 光源(Light)对象代表不同种类的光。
 
-### PerspectiveCamera
+### 相机
 
 ![frustum-3d](./static/imgs/frustum-3d.svg)
 
