@@ -21,7 +21,7 @@
         const canvas = document.querySelector('#c');
         // 01. 创建渲染器 
         // 渲染器负责将你提供的所有数据渲染绘制到canvas上 
-        // 如果你没有给three.js传canvas，three.js会自己创建一个。
+        // 如果你没有给three.js传canvas，three.js会自己创建一个,不过必须手动添加到document。
         // https://threejs.org/docs/#api/en/renderers/WebGLRenderer
         const renderer = new THREE.WebGLRenderer({ 
             canvas,

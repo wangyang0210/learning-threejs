@@ -17,6 +17,9 @@
 > https://threejs.org/manual/#en/fundamentals
 
 ### 应用结构
+
+> 场景|相机|渲染器|几何体
+
 ![threejs-structure](./static/imgs/threejs-structure.svg)
 
 首先有一个渲染器(Renderer)。这可以说是three.js的主要对象。你传入一个场景(Scene)和一个摄像机(Camera)到渲染器(Renderer)中，然后它会将摄像机视椎体中的三维场景渲染成一个二维图片显示在画布上。
