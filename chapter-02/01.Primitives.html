@@ -44,7 +44,7 @@
         import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js'
         import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
 
-        let renderer, camera, scene
+        let renderer, camera, scene, objects
 
         // 初始化渲染器 | https://threejs.org/docs/#api/zh/renderers/WebGLRenderer
         function initRenderer() {
@@ -69,25 +69,53 @@
             scene.background = new THREE.Color(0xaaaaaa)
         }
 
-        // 初始化几何体 |
-        function initGeometry() {}
-
-        // 初始化光源
+        // 初始化光源(平行光) | https://threejs.org/docs/#api/zh/lights/DirectionalLight
         function initLight() {
-            {
-                const color = 0xffffff
-                const intensity = 1
-                const light = new THREE.DirectionalLight(color, intensity)
-                light.position.set(-1, 2, 4)
-                scene.add(light)
+            const light = new THREE.DirectionalLight(0xffffff, 1)
+            light.position.set(-1, 2, 4)
+            scene.add(light)
+        }
+
+        // 调整渲染器尺寸
+        function resizeRendererToDisplaySize(renderer) {
+            const canvas = renderer.domElement
+            const width = canvas.clientWidth
+            const height = canvas.clientHeight
+            const needResize = canvas.width !== width || canvas.height !== height
+            if (needResize) renderer.setSize(width, height, false)
+            return needResize
+        }
+
+        // 动画
+        function animation(time) {
+            time *= 0.001
+            if (resizeRendererToDisplaySize(renderer)) {
+                const canvas = renderer.domElement
+                camera.aspect = canvas.clientWidth / canvas.clientHeight
+                camera.updateProjectionMatrix()
             }
-            {
-                const color = 0xffffff
-                const intensity = 1
-                const light = new THREE.DirectionalLight(color, intensity)
-                light.position.set(1, -2, -4)
-                scene.add(light)
-            }
+            objects.forEach((obj, ndx) => {
+                const speed = 0.1 + ndx * 0.05
+                const rot = time * speed
+                obj.rotation.x = rot
+                obj.rotation.y = rot
+            })
+            renderer.render(scene, camera)
+            requestAnimationFrame(animation)
+        }
+
+        // 创建材质
+        function createMaterial() {
+            const material = new THREE.MeshPhongMaterial({
+                side: THREE.DoubleSide,
+            })
+
+            const hue = Math.random()
+            const saturation = 1
+            const luminance = 0.5
+            material.color.setHSL(hue, saturation, luminance)
+
+            return material
         }
 
         function main() {
@@ -96,7 +124,7 @@
             initScene()
             initLight()
 
-            const objects = []
+            objects = []
             const spread = 15
 
             function addObject(x, y, obj) {
@@ -105,19 +133,6 @@
 
                 scene.add(obj)
                 objects.push(obj)
-            }
-
-            function createMaterial() {
-                const material = new THREE.MeshPhongMaterial({
-                    side: THREE.DoubleSide,
-                })
-
-                const hue = Math.random()
-                const saturation = 1
-                const luminance = 0.5
-                material.color.setHSL(hue, saturation, luminance)
-
-                return material
             }
 
             function addSolidGeometry(x, y, geometry) {
@@ -388,39 +403,7 @@
                 addLineGeometry(1, -2, new THREE.WireframeGeometry(new THREE.BoxGeometry(width, height, depth)))
             }
 
-            function resizeRendererToDisplaySize(renderer) {
-                const canvas = renderer.domElement
-                const width = canvas.clientWidth
-                const height = canvas.clientHeight
-                const needResize = canvas.width !== width || canvas.height !== height
-                if (needResize) {
-                    renderer.setSize(width, height, false)
-                }
-                return needResize
-            }
-
-            function render(time) {
-                time *= 0.001
-
-                if (resizeRendererToDisplaySize(renderer)) {
-                    const canvas = renderer.domElement
-                    camera.aspect = canvas.clientWidth / canvas.clientHeight
-                    camera.updateProjectionMatrix()
-                }
-
-                objects.forEach((obj, ndx) => {
-                    const speed = 0.1 + ndx * 0.05
-                    const rot = time * speed
-                    obj.rotation.x = rot
-                    obj.rotation.y = rot
-                })
-
-                renderer.render(scene, camera)
-
-                requestAnimationFrame(render)
-            }
-
-            requestAnimationFrame(render)
+            animation()
         }
 
         main()
