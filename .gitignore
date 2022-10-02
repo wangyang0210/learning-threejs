@@ -105,4 +105,4 @@ dist
 
 #editor
 .idea
-.vscode
+.vscode/*.log
