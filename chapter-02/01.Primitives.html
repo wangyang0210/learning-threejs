@@ -44,7 +44,11 @@
         import { ParametricGeometry } from 'three/addons/geometries/ParametricGeometry.js'
         import { TextGeometry } from 'three/addons/geometries/TextGeometry.js'
 
-        let renderer, camera, scene, objects
+        let renderer,
+            camera,
+            scene,
+            objects = [],
+            spread = 15
 
         // 初始化渲染器 | https://threejs.org/docs/#api/zh/renderers/WebGLRenderer
         function initRenderer() {
@@ -118,34 +122,30 @@
             return material
         }
 
-        function main() {
-            initRenderer()
-            initCamera()
-            initScene()
-            initLight()
+        // 添加对象 | 向场景中添加网格
+        function addObject(x, y, obj) {
+            obj.position.x = x * spread
+            obj.position.y = y * spread
 
-            objects = []
-            const spread = 15
+            scene.add(obj)
+            objects.push(obj)
+        }
 
-            function addObject(x, y, obj) {
-                obj.position.x = x * spread
-                obj.position.y = y * spread
+        // 添加实心几何体
+        function addSolidGeometry(x, y, geometry) {
+            const mesh = new THREE.Mesh(geometry, createMaterial())
+            addObject(x, y, mesh)
+        }
 
-                scene.add(obj)
-                objects.push(obj)
-            }
+        // 添加空心几何体
+        function addLineGeometry(x, y, geometry) {
+            const material = new THREE.LineBasicMaterial({ color: 0x000000 })
+            const mesh = new THREE.LineSegments(geometry, material)
+            addObject(x, y, mesh)
+        }
 
-            function addSolidGeometry(x, y, geometry) {
-                const mesh = new THREE.Mesh(geometry, createMaterial())
-                addObject(x, y, mesh)
-            }
-
-            function addLineGeometry(x, y, geometry) {
-                const material = new THREE.LineBasicMaterial({ color: 0x000000 })
-                const mesh = new THREE.LineSegments(geometry, material)
-                addObject(x, y, mesh)
-            }
-
+        // 创建所有实心几何体
+        function createSolidGeometry() {
             {
                 const width = 8
                 const height = 8
@@ -385,6 +385,10 @@
                 const closed = false
                 addSolidGeometry(2, -1, new THREE.TubeGeometry(path, tubularSegments, radius, radialSegments, closed))
             }
+        }
+
+        // 创建空心几何体
+        function createLineGeometry() {
             {
                 const width = 8
                 const height = 8
@@ -402,7 +406,15 @@
                 const depth = 8
                 addLineGeometry(1, -2, new THREE.WireframeGeometry(new THREE.BoxGeometry(width, height, depth)))
             }
+        }
 
+        function main() {
+            initRenderer()
+            initCamera()
+            initScene()
+            initLight()
+            createSolidGeometry()
+            createLineGeometry()
             animation()
         }
 
