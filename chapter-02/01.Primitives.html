@@ -108,9 +108,10 @@
             requestAnimationFrame(animation)
         }
 
-        // 创建材质
+        // 创建材质 | https://threejs.org/docs/index.html?q=MeshPhongMaterial#api/zh/materials/MeshPhongMaterial
         function createMaterial() {
             const material = new THREE.MeshPhongMaterial({
+                // Material共有方法 | https://threejs.org/docs/index.html?q=MeshPhongMaterial#api/zh/materials/Material.side
                 side: THREE.DoubleSide,
             })
 
@@ -137,9 +138,11 @@
             addObject(x, y, mesh)
         }
 
-        // 添加空心几何体
+        // 添加线条几何体
         function addLineGeometry(x, y, geometry) {
+            // LineBasicMaterial | https://threejs.org/docs/index.html?q=LineBasicMaterial#api/zh/materials/LineBasicMaterial
             const material = new THREE.LineBasicMaterial({ color: 0x000000 })
+            // LineSegments | https://threejs.org/docs/index.html?q=LineSegments#api/zh/objects/LineSegments
             const mesh = new THREE.LineSegments(geometry, material)
             addObject(x, y, mesh)
         }
@@ -150,17 +153,20 @@
                 const width = 8
                 const height = 8
                 const depth = 8
+                // 立方体 | https://threejs.org/docs/index.html?q=BoxGeometry#api/zh/geometries/BoxGeometry
                 addSolidGeometry(-2, 2, new THREE.BoxGeometry(width, height, depth))
             }
             {
                 const radius = 7
                 const segments = 24
+                // 圆形 | https://threejs.org/docs/index.html?q=CircleGeometry#api/zh/geometries/CircleGeometry
                 addSolidGeometry(-1, 2, new THREE.CircleGeometry(radius, segments))
             }
             {
                 const radius = 6
                 const height = 8
                 const segments = 16
+                // 圆锥体 | https://threejs.org/docs/index.html?q=ConeGeometry#api/zh/geometries/ConeGeometry
                 addSolidGeometry(0, 2, new THREE.ConeGeometry(radius, height, segments))
             }
             {
@@ -168,13 +174,16 @@
                 const radiusBottom = 4
                 const height = 8
                 const radialSegments = 12
+                // 圆柱体 | https://threejs.org/docs/index.html?q=CylinderGeometry#api/zh/geometries/CylinderGeometry
                 addSolidGeometry(1, 2, new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments))
             }
             {
                 const radius = 7
+                // 十二面体 | https://threejs.org/docs/index.html?q=DodecahedronGeometry#api/zh/geometries/DodecahedronGeometry
                 addSolidGeometry(2, 2, new THREE.DodecahedronGeometry(radius))
             }
             {
+                // 形状 | https://threejs.org/docs/index.html?q=Shape#api/zh/extras/core/Shape
                 const shape = new THREE.Shape()
                 const x = -2.5
                 const y = -5
@@ -194,11 +203,12 @@
                     bevelSize: 1,
                     bevelSegments: 2,
                 }
-
+                // 通过定义的形状挤压出几何体 | https://threejs.org/docs/index.html?q=ExtrudeGeometry#api/zh/geometries/ExtrudeGeometry
                 addSolidGeometry(-2, 1, new THREE.ExtrudeGeometry(shape, extrudeSettings))
             }
             {
                 const radius = 7
+                // 二十面体 | https://threejs.org/docs/index.html?q=IcosahedronGeometry#api/zh/geometries/IcosahedronGeometry
                 addSolidGeometry(-1, 1, new THREE.IcosahedronGeometry(radius))
             }
             {
@@ -206,10 +216,12 @@
                 for (let i = 0; i < 10; ++i) {
                     points.push(new THREE.Vector2(Math.sin(i * 0.2) * 3 + 3, (i - 5) * 0.8))
                 }
+                // 创建对称性网格 | https://threejs.org/docs/index.html?q=LatheGeometry#api/zh/geometries/LatheGeometry
                 addSolidGeometry(0, 1, new THREE.LatheGeometry(points))
             }
             {
                 const radius = 7
+                // 八面体 | https://threejs.org/docs/index.html?q=OctahedronGeometry#api/zh/geometries/OctahedronGeometry
                 addSolidGeometry(1, 1, new THREE.OctahedronGeometry(radius))
             }
             {
@@ -262,6 +274,7 @@
 
                 const slices = 25
                 const stacks = 25
+                // 参数化几何体 | https://threejs.org/docs/index.html?q=ParametricGeometry#examples/zh/geometries/ParametricGeometry
                 addSolidGeometry(2, 1, new ParametricGeometry(klein, slices, stacks))
             }
             {
@@ -269,6 +282,7 @@
                 const height = 9
                 const widthSegments = 2
                 const heightSegments = 2
+                // 平面几何体 | https://threejs.org/docs/index.html?q=PlaneGeometry#api/zh/geometries/PlaneGeometry
                 addSolidGeometry(-2, 0, new THREE.PlaneGeometry(width, height, widthSegments, heightSegments))
             }
             {
@@ -281,12 +295,14 @@
                 ]
                 const radius = 7
                 const detail = 2
+                // 多面几何体 | https://threejs.org/docs/index.html?q=PolyhedronGeometry#api/zh/geometries/PolyhedronGeometry
                 addSolidGeometry(-1, 0, new THREE.PolyhedronGeometry(verticesOfCube, indicesOfFaces, radius, detail))
             }
             {
                 const innerRadius = 2
                 const outerRadius = 7
                 const segments = 18
+                // 圆环几何体 | https://threejs.org/docs/index.html?q=RingGeometry#api/zh/geometries/RingGeometry
                 addSolidGeometry(0, 0, new THREE.RingGeometry(innerRadius, outerRadius, segments))
             }
             {
@@ -300,19 +316,23 @@
                 shape.bezierCurveTo(x + 6, y + 7.7, x + 8, y + 4.5, x + 8, y + 3.5)
                 shape.bezierCurveTo(x + 8, y + 3.5, x + 8, y, x + 5, y)
                 shape.bezierCurveTo(x + 3.5, y, x + 2.5, y + 2.5, x + 2.5, y + 2.5)
+                // 形状几何体 | https://threejs.org/docs/index.html?q=ShapeGeometry#api/zh/geometries/ShapeGeometry
                 addSolidGeometry(1, 0, new THREE.ShapeGeometry(shape))
             }
             {
                 const radius = 7
                 const widthSegments = 12
                 const heightSegments = 8
+                // 球形几何体 | https://threejs.org/docs/index.html?q=SphereGeometry#api/zh/geometries/SphereGeometry
                 addSolidGeometry(2, 0, new THREE.SphereGeometry(radius, widthSegments, heightSegments))
             }
             {
                 const radius = 7
+                // 四面几何体 | https://threejs.org/docs/index.html?q=TetrahedronGeometry#api/zh/geometries/TetrahedronGeometry
                 addSolidGeometry(-2, -1, new THREE.TetrahedronGeometry(radius))
             }
             {
+                // 字体加载器 | https://threejs.org/docs/index.html?q=FontLoader#examples/zh/loaders/FontLoader
                 const loader = new FontLoader()
                 // promisify font loading
                 function loadFont(url) {
@@ -323,6 +343,7 @@
 
                 async function doit() {
                     const font = await loadFont('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json')
+                    // 文本几何体 | https://threejs.org/docs/index.html?q=TextGeometry#examples/zh/geometries/TextGeometry
                     const geometry = new TextGeometry('three.js', {
                         font: font,
                         size: 3.0,
@@ -337,6 +358,7 @@
                     geometry.computeBoundingBox()
                     geometry.boundingBox.getCenter(mesh.position).multiplyScalar(-1)
 
+                    // 三维物体 | https://threejs.org/docs/index.html?q=Object3D#api/zh/core/Object3D
                     const parent = new THREE.Object3D()
                     parent.add(mesh)
 
@@ -349,6 +371,7 @@
                 const tubeRadius = 2
                 const radialSegments = 8
                 const tubularSegments = 24
+                // 圆环几何体 | https://threejs.org/docs/index.html?q=TorusGeometry#api/zh/geometries/TorusGeometry
                 addSolidGeometry(0, -1, new THREE.TorusGeometry(radius, tubeRadius, radialSegments, tubularSegments))
             }
             {
@@ -361,6 +384,7 @@
                 addSolidGeometry(
                     1,
                     -1,
+                    // 圆环纠缠几何体 | https://threejs.org/docs/index.html?q=TorusKnotGeometry#api/zh/geometries/TorusKnotGeometry
                     new THREE.TorusKnotGeometry(radius, tube, tubularSegments, radialSegments, p, q)
                 )
             }
@@ -374,6 +398,7 @@
                         const tx = t * 3 - 1.5
                         const ty = Math.sin(2 * Math.PI * t)
                         const tz = 0
+                        // 三维向量 | https://threejs.org/docs/index.html?q=Vector3#api/zh/math/Vector3
                         return new THREE.Vector3(tx, ty, tz).multiplyScalar(this.scale)
                     }
                 }
@@ -383,11 +408,12 @@
                 const radius = 1
                 const radialSegments = 8
                 const closed = false
+                // 管道几何体 | https://threejs.org/docs/#api/zh/geometries/TubeGeometry
                 addSolidGeometry(2, -1, new THREE.TubeGeometry(path, tubularSegments, radius, radialSegments, closed))
             }
         }
 
-        // 创建空心几何体
+        // 创建线条几何体
         function createLineGeometry() {
             {
                 const width = 8
@@ -397,6 +423,7 @@
                 addLineGeometry(
                     -1,
                     -2,
+                    // 边缘几何体 | https://threejs.org/docs/?q=EdgesGeometry#api/zh/geometries/EdgesGeometry
                     new THREE.EdgesGeometry(new THREE.BoxGeometry(width, height, depth), thresholdAngle)
                 )
             }
@@ -404,6 +431,7 @@
                 const width = 8
                 const height = 8
                 const depth = 8
+                // 网格几何体 | https://threejs.org/docs/?q=WireframeGeometry#api/zh/geometries/WireframeGeometry
                 addLineGeometry(1, -2, new THREE.WireframeGeometry(new THREE.BoxGeometry(width, height, depth)))
             }
         }
