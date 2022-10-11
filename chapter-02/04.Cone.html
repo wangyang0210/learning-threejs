@@ -41,7 +41,7 @@
     <script type="module">
         import * as THREE from 'three'
 
-        let renderer, camera, scene, circle
+        let renderer, camera, scene, cone
 
         // 初始化渲染器 | https://threejs.org/docs/#api/zh/renderers/WebGLRenderer
         function initRenderer() {
@@ -73,21 +73,21 @@
             scene.add(light)
         }
 
-        function markCircle() {
-            const geometry = new THREE.CircleGeometry(7, 100)
+        function markCone() {
+            const geometry = new THREE.ConeGeometry(8, 9, 20)
             const material = new THREE.MeshPhongMaterial({
                 color: 0x44aa88,
                 side: THREE.DoubleSide,
             })
-            circle = new THREE.Mesh(geometry, material)
-            scene.add(circle)
+            cone = new THREE.Mesh(geometry, material)
+            scene.add(cone)
         }
 
         // 动画
         function animation(time) {
             time *= 0.001
-            circle.rotation.x = time
-            circle.rotation.y = time
+            cone.rotation.x = time
+            cone.rotation.y = time
             renderer.render(scene, camera)
             requestAnimationFrame(animation)
         }
@@ -97,7 +97,7 @@
             initCamera()
             initScene()
             initLight()
-            markCircle()
+            markCone()
             animation()
         }
 
