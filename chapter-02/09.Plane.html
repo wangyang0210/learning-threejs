@@ -59,7 +59,7 @@
 
         function initScene() {
             scene = new THREE.Scene()
-            scene.background = new THREE.Color(0xabab)
+            scene.background = new THREE.Color(0xababab)
         }
 
         function initLight() {
@@ -71,7 +71,7 @@
         function makePlane() {
             const geometry = new THREE.PlaneGeometry(10, 10, 2, 2)
             const material = new THREE.MeshPhongMaterial({
-                color: 0x44aac88,
+                color: 0x44ac88,
                 side: THREE.DoubleSide,
             })
             plane = new THREE.Mesh(geometry, material)

@@ -63,7 +63,7 @@
         // 初始化场景
         function initScene() {
             scene = new THREE.Scene()
-            scene.background = new THREE.Color(0xfcff)
+            scene.background = new THREE.Color(0xfcffcf)
         }
 
         // 初始化光源
@@ -84,7 +84,7 @@
 
             const geometry = new THREE.PolyhedronGeometry(verticesOfCube, indicesOfFaces, 6, 2)
             const meterial = new THREE.MeshPhongMaterial({
-                color: 0xcece,
+                color: 0xceccee,
                 side: THREE.DoubleSide,
             })
             polyhedron = new THREE.Mesh(geometry, meterial)

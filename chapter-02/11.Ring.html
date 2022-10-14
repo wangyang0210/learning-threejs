@@ -62,14 +62,7 @@
         // 初始化场景
         function initScene() {
             scene = new THREE.Scene()
-            scene.background = new THREE.Color(0xaeae)
-        }
-
-        // 初始化光源
-        function initLight() {
-            const light = new THREE.DirectionalLight(0xfff, 1)
-            light.position.set(-1, 2, 4)
-            scene.add(light)
+            scene.background = new THREE.Color(0xaeaeae)
         }
 
         // 创建物体
@@ -94,7 +87,6 @@
             initRenderer()
             initCamera()
             initScene()
-            initLight()
             createRing()
             animation()
         }

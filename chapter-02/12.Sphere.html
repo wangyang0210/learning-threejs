@@ -63,12 +63,12 @@
         // 初始化场景
         function initScene() {
             scene = new THREE.Scene()
-            scene.background = new THREE.Color(0xf1f)
+            scene.background = new THREE.Color(0xf1ffcf)
         }
 
         // 初始化光源
         function initLight() {
-            const light = new THREE.DirectionalLight(0xfff, 1)
+            const light = new THREE.DirectionalLight(0xffffff, 1)
             light.position.set(-1, 2, 4)
             scene.add(light)
         }
@@ -77,7 +77,7 @@
         function createSphere() {
             const geometry = new THREE.SphereGeometry(7, 12, 8)
             const material = new THREE.MeshPhongMaterial({
-                color: 0xeee,
+                color: 0xeeeeee,
                 side: THREE.DoubleSide,
             })
             sphere = new THREE.Mesh(geometry, material)
