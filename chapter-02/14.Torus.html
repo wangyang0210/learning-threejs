@@ -68,12 +68,20 @@
         function createTorus() {
             const geometry = new THREE.TorusGeometry(10, 3, 16, 100)
             const material = new THREE.MeshBasicMaterial({
-                color: 0xffffff,
+                color: 0xffccff,
                 side: THREE.DoubleSide,
             })
             torus = new THREE.Mesh(geometry, material)
             scene.add(torus)
+        }
+
+        // 动画效果
+        function animation(time) {
+            time *= 0.001
+            torus.rotation.x = time
+            torus.rotation.y = time
             renderer.render(scene, camera)
+            requestAnimationFrame(animation)
         }
 
         // 初始化函数
@@ -82,6 +90,7 @@
             initCamera()
             initScene()
             createTorus()
+            animation()
         }
 
         main()
