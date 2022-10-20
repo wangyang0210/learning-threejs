@@ -41,7 +41,11 @@
         import * as THREE from 'three'
 
         // 定义全局变量
-        let renderer, scene, camera, objects
+        let renderer,
+            camera,
+            scene,
+            objects = [],
+            spread = 15
 
         // 初始化渲染器
         function initRenderer() {
@@ -50,19 +54,20 @@
                 canvas,
                 antialias: true,
             })
-            renderer.setSize(window.innerWidth, window.innerHeight)
             renderer.setPixelRatio(window.devicePixelRatio)
+            renderer.setSize(window.innerWidth, window.innerHeight)
         }
 
         // 初始化相机
         function initCamera() {
-            camera = new THREE.PerspectivealCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
-            camera.position.set(0, 0, 50)
+            camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000)
+            camera.position.set(0, 0, 100)
         }
 
         // 初始化场景
         function initScene() {
             scene = new THREE.Scene()
+            scene.background = new THREE.Color(0xeeeeee)
         }
 
         // 初始化光源
@@ -72,27 +77,36 @@
             scene.add(light)
         }
 
+        function addObject(x, y, obj) {
+            obj.position.x = x * spread
+            obj.position.y = y * spread
+
+            scene.add(obj)
+            objects.push(obj)
+        }
+
         // 创建物体
-        function createGeometry() {
-            const geometry = new THREE.SphereGeometry(7, 64, 28)
+        function createSphere() {
+            const geometry = new THREE.SphereGeometry(7, 64, 8)
+            const m1 = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+            const m2 = new THREE.MeshLambertMaterial({ color: 0xff0000 })
+            const m3 = new THREE.MeshPhongMaterial({ color: 0xff0000 })
+            const mesh1 = new THREE.Mesh(geometry, m1)
+            const mesh2 = new THREE.Mesh(geometry, m2)
+            const mesh3 = new THREE.Mesh(geometry, m3)
+            addObject(-3, 0, mesh1)
+            addObject(0, 0, mesh2)
+            addObject(3, 0, mesh3)
         }
-
-        function createMaterial() {
-            const material = new THREE.MeshPhongMaterial({
-                side: THREE.DoubleSide,
-            })
-        }
-
-        // 创建多个物体
 
         // 动画效果
         function animation(time) {
             time *= 0.001
-            objects.forEach(r => {
-                r.rotation.x = time
-                r.rotation.y = time
+            objects.forEach(item => {
+                item.rotation.x = time
+                item.rotation.y = time
             })
-            renderer.renderer(scene, camera)
+            renderer.render(scene, camera)
             requestAnimationFrame(animation)
         }
 
@@ -102,6 +116,7 @@
             initCamera()
             initScene()
             initLight()
+            createSphere()
             animation()
         }
 
