@@ -88,24 +88,12 @@
         // 创建物体
         function createSphere() {
             const geometry = new THREE.SphereGeometry(7, 64, 8)
-            const m1 = new THREE.MeshStandardMaterial({ color: 0xff0000, shininess: 0 })
+            const m1 = new THREE.MeshStandardMaterial({ color: 0xff0000, shininess: 0, flatShading: true })
             const m2 = new THREE.MeshStandardMaterial({ color: 0xff0000, shininess: 30 })
-            const m3 = new THREE.MeshStandardMaterial({ color: 0xff0000, shininess: 150 })
-            const m4 = new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0 })
-            const m5 = new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 0.5 })
-            const m6 = new THREE.MeshStandardMaterial({ color: 0xff0000, roughness: 1 })
             const mesh1 = new THREE.Mesh(geometry, m1)
             const mesh2 = new THREE.Mesh(geometry, m2)
-            const mesh3 = new THREE.Mesh(geometry, m3)
-            const mesh4 = new THREE.Mesh(geometry, m4)
-            const mesh5 = new THREE.Mesh(geometry, m5)
-            const mesh6 = new THREE.Mesh(geometry, m6)
             addObject(-3, 0, mesh1)
             addObject(0, 0, mesh2)
-            addObject(3, 0, mesh3)
-            addObject(-3, -1, mesh4)
-            addObject(-3, -2, mesh5)
-            addObject(-3, -3, mesh6)
         }
 
         // 动画效果
