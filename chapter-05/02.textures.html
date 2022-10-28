@@ -59,14 +59,22 @@
             const geometry = new THREE.BoxGeometry(boxWidth, boxHeight, boxDepth)
 
             const cubes = [] // just an array we can use to rotate the cubes
-            const loader = new THREE.TextureLoader()
+            const loadManager = new THREE.LoadingManager()
+            const loader = new THREE.TextureLoader(loadManager)
 
-            const material = new THREE.MeshBasicMaterial({
-                map: loader.load('https://threejs.org/manual/examples/resources/images/wall.jpg'),
-            })
-            const cube = new THREE.Mesh(geometry, material)
-            scene.add(cube)
-            cubes.push(cube) // add to our list of cubes to rotate
+            const materials = [
+                new THREE.MeshBasicMaterial({ map: loader.load('./resource/2fxgtH.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loader.load('./resource/2fxcAe.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loader.load('./resource/2fxy7D.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loader.load('./resource/2fxs0O.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loader.load('./resource/2fxs0O.jpg') }),
+                new THREE.MeshBasicMaterial({ map: loader.load('./resource/2fxBX6.jpg') }),
+            ]
+            loadManager.onLoad = () => {
+                const cube = new THREE.Mesh(geometry, materials)
+                scene.add(cube)
+                cubes.push(cube) // 添加到我们要旋转的立方体数组中
+            }
 
             function resizeRendererToDisplaySize(renderer) {
                 const canvas = renderer.domElement
