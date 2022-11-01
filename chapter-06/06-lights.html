@@ -8,7 +8,7 @@
         <meta
             name="viewport"
             content="width=device-width, initial-scale=1.0" />
-        <title>HemisphereLight</title>
+        <title>RectAreaLight</title>
         <script type="importmap">
             {
                 "imports": {
@@ -40,11 +40,14 @@
     <script type="module">
         import * as THREE from 'three'
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
+        import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js'
+        import { RectAreaLightHelper } from 'three/addons/helpers/RectAreaLightHelper.js'
         import { GUI } from 'three/addons/libs/lil-gui.module.min.js'
 
         function main() {
             const canvas = document.querySelector('#c')
             const renderer = new THREE.WebGLRenderer({ canvas })
+            RectAreaLightUniformsLib.init()
 
             const fov = 45
             const aspect = 2 // the canvas default
@@ -72,7 +75,7 @@
                 texture.repeat.set(repeats, repeats)
 
                 const planeGeo = new THREE.PlaneGeometry(planeSize, planeSize)
-                const planeMat = new THREE.MeshPhongMaterial({
+                const planeMat = new THREE.MeshStandardMaterial({
                     map: texture,
                     side: THREE.DoubleSide,
                 })
@@ -83,7 +86,7 @@
             {
                 const cubeSize = 4
                 const cubeGeo = new THREE.BoxGeometry(cubeSize, cubeSize, cubeSize)
-                const cubeMat = new THREE.MeshPhongMaterial({ color: '#8AC' })
+                const cubeMat = new THREE.MeshStandardMaterial({ color: '#8AC' })
                 const mesh = new THREE.Mesh(cubeGeo, cubeMat)
                 mesh.position.set(cubeSize + 1, cubeSize / 2, 0)
                 scene.add(mesh)
@@ -93,7 +96,7 @@
                 const sphereWidthDivisions = 32
                 const sphereHeightDivisions = 16
                 const sphereGeo = new THREE.SphereGeometry(sphereRadius, sphereWidthDivisions, sphereHeightDivisions)
-                const sphereMat = new THREE.MeshPhongMaterial({ color: '#CA8' })
+                const sphereMat = new THREE.MeshStandardMaterial({ color: '#CA8' })
                 const mesh = new THREE.Mesh(sphereGeo, sphereMat)
                 mesh.position.set(-sphereRadius - 1, sphereRadius + 2, 0)
                 scene.add(mesh)
@@ -112,17 +115,50 @@
                 }
             }
 
+            class DegRadHelper {
+                constructor(obj, prop) {
+                    this.obj = obj
+                    this.prop = prop
+                }
+                get value() {
+                    return THREE.MathUtils.radToDeg(this.obj[this.prop])
+                }
+                set value(v) {
+                    this.obj[this.prop] = THREE.MathUtils.degToRad(v)
+                }
+            }
+
+            function makeXYZGUI(gui, vector3, name, onChangeFn) {
+                const folder = gui.addFolder(name)
+                folder.add(vector3, 'x', -10, 10).onChange(onChangeFn)
+                folder.add(vector3, 'y', 0, 10).onChange(onChangeFn)
+                folder.add(vector3, 'z', -10, 10).onChange(onChangeFn)
+                folder.open()
+            }
+
             {
-                const skyColor = 0xb1e1ff // light blue
-                const groundColor = 0xb97a20 // brownish orange
-                const intensity = 1
-                const light = new THREE.HemisphereLight(skyColor, groundColor, intensity)
+                const color = 0xffffff
+                const intensity = 5
+                const width = 12
+                const height = 4
+                const light = new THREE.RectAreaLight(color, intensity, width, height)
+                light.position.set(0, 10, 0)
+                light.rotation.x = THREE.MathUtils.degToRad(-90)
                 scene.add(light)
 
+                const helper = new RectAreaLightHelper(light)
+                light.add(helper)
+
                 const gui = new GUI()
-                gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('skyColor')
-                gui.addColor(new ColorGUIHelper(light, 'groundColor'), 'value').name('groundColor')
-                gui.add(light, 'intensity', 0, 2, 0.01)
+                gui.addColor(new ColorGUIHelper(light, 'color'), 'value').name('color')
+                gui.add(light, 'intensity', 0, 10, 0.01)
+                gui.add(light, 'width', 0, 20)
+                gui.add(light, 'height', 0, 20)
+                gui.add(new DegRadHelper(light.rotation, 'x'), 'value', -180, 180).name('x rotation')
+                gui.add(new DegRadHelper(light.rotation, 'y'), 'value', -180, 180).name('y rotation')
+                gui.add(new DegRadHelper(light.rotation, 'z'), 'value', -180, 180).name('z rotation')
+
+                makeXYZGUI(gui, light.position, 'position')
             }
 
             function resizeRendererToDisplaySize(renderer) {
