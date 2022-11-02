@@ -1,5 +1,7 @@
 # chapter-04
 
+TODO 每种材质独立的案例 demo
+
 > 材质
 
 ## MeshBasicMaterial
